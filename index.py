@@ -2,8 +2,10 @@ from tkinter import *
 import sqlite3
 import tkinter.ttk as ttk
 import tkinter.messagebox as tkMessageBox
+import os
 
-#DEVELOPED BY MOHAMAD EL AYOUBI
+
+# DEVELOPED BY MOHAMAD EL AYOUBI
 root = Tk()
 root.title("Contact List")
 width = 700
@@ -16,7 +18,7 @@ root.geometry("%dx%d+%d+%d" % (width, height, x, y))
 root.resizable(0, 0)
 root.config(bg="#6666ff")
 
-#============================VARIABLES===================================
+# ============================VARIABLES===================================
 FIRSTNAME = StringVar()
 LASTNAME = StringVar()
 GENDER = StringVar()
@@ -24,9 +26,7 @@ AGE = StringVar()
 ADDRESS = StringVar()
 CONTACT = StringVar()
 
-
-
-#============================METHODS=====================================
+# ============================METHODS=====================================
 
 def Database():
     conn = sqlite3.connect("pythontut.db")
@@ -46,7 +46,8 @@ def SubmitData():
         tree.delete(*tree.get_children())
         conn = sqlite3.connect("pythontut.db")
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO `member` (firstname, lastname, gender, age, address, contact) VALUES(?, ?, ?, ?, ?, ?)", (str(FIRSTNAME.get()), str(LASTNAME.get()), str(GENDER.get()), int(AGE.get()), str(ADDRESS.get()), str(CONTACT.get())))
+        cursor.execute("INSERT INTO `member` (firstname, lastname, gender, age, address, contact) VALUES(?, ?, ?, ?, ?, ?)", 
+                       (str(FIRSTNAME.get()), str(LASTNAME.get()), str(GENDER.get()), int(AGE.get()), str(ADDRESS.get()), str(CONTACT.get())))
         conn.commit()
         cursor.execute("SELECT * FROM `member` ORDER BY `lastname` ASC")
         fetch = cursor.fetchall()
@@ -63,12 +64,13 @@ def SubmitData():
 
 def UpdateData():
     if GENDER.get() == "":
-       result = tkMessageBox.showwarning('', 'Please Complete The Required Field', icon="warning")
+        result = tkMessageBox.showwarning('', 'Please Complete The Required Field', icon="warning")
     else:
         tree.delete(*tree.get_children())
         conn = sqlite3.connect("pythontut.db")
         cursor = conn.cursor()
-        cursor.execute("UPDATE `member` SET `firstname` = ?, `lastname` = ?, `gender` =?, `age` = ?,  `address` = ?, `contact` = ? WHERE `mem_id` = ?", (str(FIRSTNAME.get()), str(LASTNAME.get()), str(GENDER.get()), str(AGE.get()), str(ADDRESS.get()), str(CONTACT.get()), int(mem_id)))
+        cursor.execute("UPDATE `member` SET `firstname` = ?, `lastname` = ?, `gender` =?, `age` = ?,  `address` = ?, `contact` = ? WHERE `mem_id` = ?", 
+                       (str(FIRSTNAME.get()), str(LASTNAME.get()), str(GENDER.get()), str(AGE.get()), str(ADDRESS.get()), str(CONTACT.get()), int(mem_id)))
         conn.commit()
         cursor.execute("SELECT * FROM `member` ORDER BY `lastname` ASC")
         fetch = cursor.fetchall()
@@ -82,12 +84,11 @@ def UpdateData():
         AGE.set("")
         ADDRESS.set("")
         CONTACT.set("")
-        
-    
+
 def OnSelected(event):
     global mem_id, UpdateWindow
     curItem = tree.focus()
-    contents =(tree.item(curItem))
+    contents = (tree.item(curItem))
     selecteditem = contents['values']
     mem_id = selecteditem[0]
     FIRSTNAME.set("")
@@ -114,7 +115,7 @@ def OnSelected(event):
     if 'NewWindow' in globals():
         NewWindow.destroy()
 
-    #===================FRAMES==============================
+    # ===================FRAMES==============================
     FormTitle = Frame(UpdateWindow)
     FormTitle.pack(side=TOP)
     ContactForm = Frame(UpdateWindow)
@@ -123,8 +124,8 @@ def OnSelected(event):
     Male = Radiobutton(RadioGroup, text="Male", variable=GENDER, value="Male",  font=('arial', 14)).pack(side=LEFT)
     Female = Radiobutton(RadioGroup, text="Female", variable=GENDER, value="Female",  font=('arial', 14)).pack(side=LEFT)
     
-    #===================LABELS==============================
-    lbl_title = Label(FormTitle, text="Updating Contacts", font=('arial', 16), bg="orange",  width = 300)
+    # ===================LABELS==============================
+    lbl_title = Label(FormTitle, text="Updating Contacts", font=('arial', 16), bg="orange",  width=300)
     lbl_title.pack(fill=X)
     lbl_firstname = Label(ContactForm, text="Firstname", font=('arial', 14), bd=5)
     lbl_firstname.grid(row=0, sticky=W)
@@ -139,7 +140,7 @@ def OnSelected(event):
     lbl_contact = Label(ContactForm, text="Contact", font=('arial', 14), bd=5)
     lbl_contact.grid(row=5, sticky=W)
 
-    #===================ENTRY===============================
+    # ===================ENTRY===============================
     firstname = Entry(ContactForm, textvariable=FIRSTNAME, font=('arial', 14))
     firstname.grid(row=0, column=1)
     lastname = Entry(ContactForm, textvariable=LASTNAME, font=('arial', 14))
@@ -152,21 +153,19 @@ def OnSelected(event):
     contact = Entry(ContactForm, textvariable=CONTACT,  font=('arial', 14))
     contact.grid(row=5, column=1)
     
-
-    #==================BUTTONS==============================
+    # ==================BUTTONS==============================
     btn_updatecon = Button(ContactForm, text="Update", width=50, command=UpdateData)
     btn_updatecon.grid(row=6, columnspan=2, pady=10)
 
 
-#fn1353p    
 def DeleteData():
     if not tree.selection():
-       result = tkMessageBox.showwarning('', 'Please Select Something First!', icon="warning")
+        result = tkMessageBox.showwarning('', 'Please Select Something First!', icon="warning")
     else:
         result = tkMessageBox.askquestion('', 'Are you sure you want to delete this record?', icon="warning")
         if result == 'yes':
             curItem = tree.focus()
-            contents =(tree.item(curItem))
+            contents = (tree.item(curItem))
             selecteditem = contents['values']
             tree.delete(curItem)
             conn = sqlite3.connect("pythontut.db")
@@ -197,7 +196,7 @@ def AddNewWindow():
     if 'UpdateWindow' in globals():
         UpdateWindow.destroy()
     
-    #===================FRAMES==============================
+    # ===================FRAMES==============================
     FormTitle = Frame(NewWindow)
     FormTitle.pack(side=TOP)
     ContactForm = Frame(NewWindow)
@@ -206,8 +205,8 @@ def AddNewWindow():
     Male = Radiobutton(RadioGroup, text="Male", variable=GENDER, value="Male",  font=('arial', 14)).pack(side=LEFT)
     Female = Radiobutton(RadioGroup, text="Female", variable=GENDER, value="Female",  font=('arial', 14)).pack(side=LEFT)
     
-    #===================LABELS==============================
-    lbl_title = Label(FormTitle, text="Adding New Contacts", font=('arial', 16), bg="#66ff66",  width = 300)
+    # ===================LABELS==============================
+    lbl_title = Label(FormTitle, text="Adding New Contacts", font=('arial', 16), bg="#66ff66",  width=300)
     lbl_title.pack(fill=X)
     lbl_firstname = Label(ContactForm, text="Firstname", font=('arial', 14), bd=5)
     lbl_firstname.grid(row=0, sticky=W)
@@ -222,7 +221,7 @@ def AddNewWindow():
     lbl_contact = Label(ContactForm, text="Contact", font=('arial', 14), bd=5)
     lbl_contact.grid(row=5, sticky=W)
 
-    #===================ENTRY===============================
+    # ===================ENTRY===============================
     firstname = Entry(ContactForm, textvariable=FIRSTNAME, font=('arial', 14))
     firstname.grid(row=0, column=1)
     lastname = Entry(ContactForm, textvariable=LASTNAME, font=('arial', 14))
@@ -235,16 +234,52 @@ def AddNewWindow():
     contact = Entry(ContactForm, textvariable=CONTACT,  font=('arial', 14))
     contact.grid(row=5, column=1)
     
-
-    #==================BUTTONS==============================
+    # ==================BUTTONS==============================
     btn_addcon = Button(ContactForm, text="Save", width=50, command=SubmitData)
     btn_addcon.grid(row=6, columnspan=2, pady=10)
 
+# ============================RESET DATABASE FUNCTION====================
+def ResetDatabase():
+    import sqlite3
+    import os
+    from tkinter import messagebox
 
+    db_name = "pythontut.db"
 
+    confirm = messagebox.askyesno(
+        "Confirm Reset",
+        "Are you sure you want to reset the database?\nAll contact data will be permanently deleted!"
+    )
 
-    
-#============================FRAMES======================================
+    if confirm:
+        try:
+            if os.path.exists(db_name):
+                os.remove(db_name)
+
+            conn = sqlite3.connect(db_name)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS member (
+                    mem_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    firstname TEXT,
+                    lastname TEXT,
+                    gender TEXT,
+                    age TEXT,
+                    address TEXT,
+                    contact TEXT
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            tree.delete(*tree.get_children())
+
+            messagebox.showinfo("Database Reset", "Database has been reset successfully!")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to reset database:\n{str(e)}")
+
+# ============================FRAMES======================================
 Top = Frame(root, width=500, bd=1, relief=SOLID)
 Top.pack(side=TOP)
 Mid = Frame(root, width=500,  bg="#6666ff")
@@ -257,19 +292,22 @@ MidRight = Frame(Mid, width=100)
 MidRight.pack(side=RIGHT, pady=10)
 TableMargin = Frame(root, width=500)
 TableMargin.pack(side=TOP)
-#============================LABELS======================================
+
+# ============================LABELS======================================
 lbl_title = Label(Top, text="Contact Management System", font=('arial', 16), width=500)
 lbl_title.pack(fill=X)
 
-#============================ENTRY=======================================
-
-#============================BUTTONS=====================================
+# ============================BUTTONS=====================================
 btn_add = Button(MidLeft, text="+ ADD NEW", bg="#66ff66", command=AddNewWindow)
 btn_add.pack()
 btn_delete = Button(MidRight, text="DELETE", bg="red", command=DeleteData)
 btn_delete.pack(side=RIGHT)
 
-#============================TABLES======================================
+# NEW RESET DATABASE BUTTON
+btn_reset = Button(Mid, text="RESET DATABASE", bg="#ff4d4d", fg="white", font=('arial', 12, 'bold'), command=ResetDatabase)
+btn_reset.pack(pady=10)
+
+# ============================TABLES======================================
 scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
 scrollbary = Scrollbar(TableMargin, orient=VERTICAL)
 tree = ttk.Treeview(TableMargin, columns=("MemberID", "Firstname", "Lastname", "Gender", "Age", "Address", "Contact"), height=400, selectmode="extended", yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
@@ -295,8 +333,9 @@ tree.column('#7', stretch=NO, minwidth=0, width=120)
 tree.pack()
 tree.bind('<Double-Button-1>', OnSelected)
 
-#============================INITIALIZATION==============================
+# ============================INITIALIZATION==============================
 if __name__ == '__main__':
     Database()
     root.mainloop()
+
     
