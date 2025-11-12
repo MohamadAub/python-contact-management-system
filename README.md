@@ -24,7 +24,8 @@ This system provides a simple interface to manage contact information. Each cont
 The project is implemented using **Tkinter** for the GUI and **SQLite** for the database backend.
 
 
-C:\Users\mhmda\OneDrive\Documents\My_Programming_Projects\Contact Management System In PYTHON\Contact-Management-System-In-PYTHON.mp4
+![Project Demo](Contact-Management-System-In-PYTHON.gif)
+
 
 ---
 
